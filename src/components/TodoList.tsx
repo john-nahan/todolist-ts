@@ -1,6 +1,6 @@
 import { useState } from "react";
 import SearchBar from "./SearchBar";
-import TodoContainer from "./ToDoContainer";
+import TodoContainer from "./TodoContainer";
 
 export interface TodoElement {
   id: string;
@@ -10,28 +10,10 @@ export interface TodoElement {
 }
 
 const TodoList = () => {
-  const [todoList, setTodoList] = useState<TodoElement[]>([
-    {
-      id: "1",
-      title: "Item 1",
-      description: "Due on 30-4-1975",
-      isDone: false,
-    },
-    {
-      id: "2",
-      title: "Item 2",
-      description: "Due on 30-4-1975",
-      isDone: false,
-    },
-    {
-      id: "3",
-      title: "Item 3",
-      description: "Due on 30-4-1975",
-      isDone: false,
-    },
-  ]);
+  const [todoList, setTodoList] = useState<TodoElement[]>([]);
+  const [showUncompletedOnly, setShowUncompletedOnly] = useState(false);
 
-  const handleClick = (id: string) => {
+  const handleDelete = (id: string) => {
     return setTodoList(
       todoList.filter((todo) => {
         return todo.id !== id;
@@ -47,14 +29,59 @@ const TodoList = () => {
     );
   };
 
+  const handleAddTodo = (title: string) => {
+    const newTodo: TodoElement = {
+      id: Date.now().toString(),
+      title: title,
+      description: "Click here to edit",
+      isDone: false,
+    };
+
+    const newArray: TodoElement[] = [newTodo, ...todoList];
+
+    setTodoList(newArray);
+  };
+
+  const handleUpdate = (id: string, title: string, description: string) => {
+    const newArray: TodoElement[] = [...todoList];
+    const currentItemIndex: number = newArray.findIndex(
+      (todo) => todo.id === id
+    );
+
+    newArray[currentItemIndex] = {
+      ...newArray[currentItemIndex],
+      title,
+      description,
+    };
+
+    setTodoList(newArray);
+  };
+  /* Home work */
+  const unCompletedTasks = [...todoList].filter((todo) => !todo.isDone);
+
+  const handleFilter = () => {
+    setShowUncompletedOnly(!showUncompletedOnly);
+  };
+
+  const totalTask = todoList.length;
+
+  /* Home work */
+
+  const sortTodoList = (list: TodoElement[]) => {
+    return [...list].sort((a, b) => Number(a.isDone) - Number(b.isDone));
+  };
+
   return (
     <div className="shadow w-1/2 h-1/2 p-5">
       <h1 className="text-lg font-bold">TO-DO LIST</h1>
-      <SearchBar />
+      <SearchBar onAddTodo={handleAddTodo} />
       <TodoContainer
-        todoList={todoList}
-        onClick={handleClick}
+        todoList={sortTodoList(showUncompletedOnly ? unCompletedTasks : todoList)}
+        onDelete={handleDelete}
         onToggleDone={handleToggle}
+        onUpdate={handleUpdate}
+        onFilter={handleFilter}
+        totalTask={totalTask}
       />
     </div>
   );

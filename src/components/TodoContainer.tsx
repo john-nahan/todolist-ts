@@ -1,26 +1,39 @@
+import FilterTask from "./FilterTask";
 import TodoItem from "./TodoItem";
 import { TodoElement } from "./TodoList";
+import TotalTask from "./TotalTask";
 
 interface TodoContainerProps {
   todoList: TodoElement[];
-  onClick: (id: string) => void;
+  totalTask: number;
+  onDelete: (id: string) => void;
   onToggleDone: (id: string) => void;
+  onUpdate: (id: string, title: string, description: string) => void;
+  onFilter: () => void;
 }
 
 const TodoContainer = ({
   todoList,
-  onClick,
+  totalTask,
+  onDelete,
   onToggleDone,
+  onUpdate,
+  onFilter,
 }: TodoContainerProps) => {
   return (
     <div>
+      <div className="flex justify-between">
+        <FilterTask onFilter={onFilter} />
+        <TotalTask totalTask={totalTask} />
+      </div>
       {todoList.length > 0 ? (
         todoList.map((todo) => (
           <TodoItem
             key={todo.id}
             {...todo}
-            onClick={onClick}
+            onDelete={onDelete}
             onToggleDone={onToggleDone}
+            onUpdate={onUpdate}
           />
         ))
       ) : (
