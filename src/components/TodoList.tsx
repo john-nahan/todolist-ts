@@ -64,6 +64,10 @@ const TodoList = () => {
   };
 
   const totalTask = todoList.length;
+  const completedTask = [...todoList].reduce(
+    (acc, todo) => (acc += todo.isDone ? 1 : 0),
+    0
+  );
 
   /* Home work */
 
@@ -76,12 +80,15 @@ const TodoList = () => {
       <h1 className="text-lg font-bold">TO-DO LIST</h1>
       <SearchBar onAddTodo={handleAddTodo} />
       <TodoContainer
-        todoList={sortTodoList(showUncompletedOnly ? unCompletedTasks : todoList)}
+        todoList={sortTodoList(
+          showUncompletedOnly ? unCompletedTasks : todoList
+        )}
         onDelete={handleDelete}
         onToggleDone={handleToggle}
         onUpdate={handleUpdate}
         onFilter={handleFilter}
         totalTask={totalTask}
+        completedTask={completedTask}
       />
     </div>
   );

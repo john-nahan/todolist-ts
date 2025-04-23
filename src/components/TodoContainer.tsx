@@ -6,6 +6,7 @@ import TotalTask from "./TotalTask";
 interface TodoContainerProps {
   todoList: TodoElement[];
   totalTask: number;
+  completedTask: number;
   onDelete: (id: string) => void;
   onToggleDone: (id: string) => void;
   onUpdate: (id: string, title: string, description: string) => void;
@@ -15,6 +16,7 @@ interface TodoContainerProps {
 const TodoContainer = ({
   todoList,
   totalTask,
+  completedTask,
   onDelete,
   onToggleDone,
   onUpdate,
@@ -24,7 +26,7 @@ const TodoContainer = ({
     <div>
       <div className="flex justify-between">
         <FilterTask onFilter={onFilter} />
-        <TotalTask totalTask={totalTask} />
+        <TotalTask totalTask={totalTask} completedTask={completedTask} />
       </div>
       {todoList.length > 0 ? (
         todoList.map((todo) => (
